@@ -1,0 +1,83 @@
+services:
+  hello_asl_bash:
+    image: bash:latest
+    volumes:
+      - ./bash:/usr/src/hello
+    working_dir: /usr/src/hello
+    command: sh -c "bash ./Hello.sh"
+  # In production a docker file would still probably be used to better orchestrate the load sequence however this works for this use case
+  hello_asl_c:
+    image: gcc:latest
+    volumes:
+      - ./c:/usr/src/hello
+    working_dir: /usr/src/hello
+    command: sh -c "gcc -o hello hello.c && ./hello" 
+  # In production a docker file would still probably be used to better orchestrate the load sequence however this works for this use case
+  # In production a go.sum should be generated so file integrity is ensured
+  hello_asl_go:
+    image: golang:latest
+    volumes:
+      - ./go:/usr/src/hello
+    working_dir: /usr/src/hello
+    # > /dev/null 2>&1 silences output from this command
+    command: sh -c "go mod download > /dev/null 2>&1 && go build -o /usr/local/bin/hello ./... && hello"
+  # In production a docker file would still probably be used to better orchestrate the load sequence however this works for this use case
+  hello_asl_java:
+    image: openjdk:latest
+    volumes:
+      - ./java:/usr/src/hello
+    working_dir: /usr/src/hello
+    command: sh -c "javac hello.java && java Hello"
+  # In production a docker file would still probably be used to better orchestrate the load sequence however this works for this use case
+  hello_asl_lua:
+    image: debian:latest
+    volumes:
+      - ./lua:/usr/src/hello
+    working_dir: /usr/src/hello
+    # Silence update and install commands
+    command: sh -c "apt-get -y update > /dev/null 2>&1 && apt-get -y install lua5.1 > /dev/null 2>&1 && lua hello.lua"
+  hello_asl_node:
+    image: node:latest
+    volumes:
+      - ./node:/usr/src/hello
+    working_dir: /usr/src/hello
+    command: sh -c "node hello.js"
+  hello_asl_perl:
+    image: perl:latest
+    volumes:
+      - ./perl:/usr/src/hello
+    working_dir: /usr/src/hello
+    command: sh -c "perl ./hello.pl"
+  hello_asl_php:
+    image: php:latest
+    volumes:
+      - ./php:/usr/src/hello
+    working_dir: /usr/src/hello
+    command: sh -c "php ./hello.php"
+  hello_asl_python:
+    image: python:latest
+    volumes:
+      - ./python:/usr/src/hello
+    working_dir: /usr/src/hello
+    command: sh -c "python ./hello.py"
+  hello_asl_ruby:
+    image: ruby:latest
+    volumes:
+      - ./ruby:/usr/src/hello
+    working_dir: /usr/src/hello
+    command: sh -c "ruby ./hello.rb"
+  # In production a docker file would still probably be used to better orchestrate the load sequence however this works for this use case
+  hello_asl_rust:
+    image: rust:latest
+    volumes:
+      - ./rust:/usr/src/hello
+    working_dir: /usr/src/hello
+    command: sh -c "cargo install --path . > /dev/null 2>&1 && cargo build --release > /dev/null 2>&1 && ./target/release/hello"
+  # In production a docker file would still probably be used to better orchestrate the load sequence however this works for this use case
+  # Swift offers a more verbose compiling method via spm `swift package` cli however unecessary for this use case
+  hello_asl_swift:
+    image: swift:latest
+    volumes:
+      - ./swift:/usr/src/hello
+    working_dir: /usr/src/hello
+    command: swift hello.swift

@@ -1,0 +1,50 @@
+services:
+# piggy back off of the images made already
+  hello_bash:
+    image: hello_bash
+    tty: true
+    stdin_open: true
+  hello_c:
+    image: hello_c
+    tty: true
+    stdin_open: true
+  hello_go:
+    image: hello_go
+    tty: true
+    stdin_open: true
+  hello_java:
+    image: hello_java
+    tty: true
+    stdin_open: true
+  hello_node:
+    image: hello_node
+    tty: true
+    stdin_open: true
+  hello_lua:
+    image: hello_lua
+    tty: true
+    stdin_open: true
+  hello_perl:
+    image: hello_perl
+    tty: true
+    stdin_open: true
+  hello_php:
+    image: hello_php
+    tty: true
+    stdin_open: true
+  hello_python:
+    image: hello_python
+    tty: true
+    stdin_open: true
+  hello_ruby:
+    image: hello_ruby
+    tty: true
+    stdin_open: true
+  hello_rust:
+    image: hello_rust
+    tty: true
+    stdin_open: true
+  hello_swift:
+    image: hello_swift
+    tty: true
+    stdin_open: true

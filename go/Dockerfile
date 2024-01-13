@@ -1,6 +1,7 @@
 FROM golang:latest
 WORKDIR /usr/src/hello
 # pre-copy/cache go.mod for pre-downloading dependencies and only redownloading them in subsequent builds if they change
+# omitted go.sum do to no dependencies
 COPY go.mod ./
 RUN go mod download
 
