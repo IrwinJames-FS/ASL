@@ -1,2 +1,2 @@
 # ASL
-Repo for Advanced server side lessons
+Just a sequence of simple docker implementations
