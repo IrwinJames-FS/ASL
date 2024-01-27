@@ -10,8 +10,8 @@ const router = new express.Router()
 router.get(`/`, galaxyCtlr.index)         // show all galaxys
 router.post(`/`, galaxyCtlr.create)       // create galaxy
 router.get(`/:id`, galaxyCtlr.show)       // show galaxy
-router.put(`/:id`, galaxyCtlr.index)      // update a galaxy
-router.delete(`/:di`, galaxyCtlr.remove)  // remove a galaxy
+router.put(`/:id`, galaxyCtlr.update)      // update a galaxy
+router.delete(`/:id`, galaxyCtlr.remove)  // remove a galaxy
 
 // export "router"
 module.exports = router
