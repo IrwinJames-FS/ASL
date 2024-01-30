@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "watch": "nodemon -e twig,json,js index.js",
+    "load": "node ./load-data.js",
     "test": "jest space-tracker.test.js"
   },
   "keywords": [],

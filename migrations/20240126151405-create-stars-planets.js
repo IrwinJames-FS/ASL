@@ -8,14 +8,17 @@ module.exports = {
         references: {
           model: "Stars",
           key: "id"
-        }
+        },
+        onDelete: "CASCADE"
       },
       PlanetId: {
         type: Sequelize.INTEGER,
         references: {
           model: "Planets",
           key: "id"
-        }
+        },
+        onDelete: "CASCADE",
+
       }
     });
   },

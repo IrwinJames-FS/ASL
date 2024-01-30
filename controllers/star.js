@@ -95,7 +95,6 @@ const remove =  async (req, res, next) => {
   try {
     await Star.destroy({
       where:{id},
-      cascade: true, //Suns and planets should not exist without a star
     });
     return res.redirect(303, `/stars/`);
   } catch (e) {

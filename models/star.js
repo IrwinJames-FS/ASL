@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       models.Star.belongsTo(models.Galaxy);
-      models.Star.belongsToMany(models.Planet, {through: "StarsPlanets"});
+      models.Star.belongsToMany(models.Planet, {through: "StarsPlanets", onDelete:"cascade"});
     }
   }
   Star.init({

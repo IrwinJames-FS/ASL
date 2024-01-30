@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.Galaxy.hasMany(models.Star);
+      models.Galaxy.hasMany(models.Star, {onDelete: "CASCADE", hooks: true});
     }
   }
   Galaxy.init({

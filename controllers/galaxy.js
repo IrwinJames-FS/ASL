@@ -48,6 +48,7 @@ const create = async (req, res, next) => {
     const galaxy = await Galaxy.create(req.body);
     res.redirect(303, `/galaxies/${galaxy.id}`);
   } catch (e) {
+    console.log(e);
     switch (e.constructor) {
       case UniqueConstraintError:
         return next(new ValidationError("Duplicate Unique Value", e.errors));
@@ -81,7 +82,7 @@ const update = async (req, res, next) => {
     }
   }
 };
-
+/*https://github.com/sequelize/sequelize/issues/8444 (CASCADE FAILED WITH hasMany or many to many)*/
 /**
  * 
  * @param {import("express").Request} req 
@@ -92,10 +93,8 @@ const update = async (req, res, next) => {
 const remove =  async (req, res, next) => {
   const { id } = req.params;
   try {
-    const galaxy = await Galaxy.destroy({
-      where:{id},
-      cascade: true, //Suns and planets should not exist without a galaxy
-    });
+    const galaxy = await Galaxy.findByPk(id);
+    await galaxy.destroy();
     return res.redirect(303, `/galaxies/`);
   } catch (e) {
     return next(e);

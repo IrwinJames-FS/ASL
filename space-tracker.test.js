@@ -40,13 +40,12 @@ const groups = [
 				async () => {
 					try {
 						const response = await axios.post("http://localhost:3000/galaxies", qs.stringify({
-							name: "Milky Way",
+							name: "Neitherlands",
 							size: 1e5,
-							description: "The Milky Way is a barred spiral galaxy"
+							description: "A Fictional galaxy"
 						}));
 						galaxy = response.data.id;
 						expect(response.status).toBe(200);
-
 					} catch (e) {
 						throw e;
 					}
@@ -57,9 +56,9 @@ const groups = [
 				async () => {
 					try {
 						const response = await axios.post("http://localhost:3000/galaxies", qs.stringify({
-							name: "Milky Way",
+							name: "Neitherlands",
 							size: 1e5,
-							description: "The Milky Way is a barred spiral galaxy"
+							description: "A Fictional galaxy"
 						}));
 						throw {response};
 					} catch ({response:e}) {
@@ -81,15 +80,15 @@ const groups = [
 			[
 				`Able to update a galaxy`,
 				async () => {
-					if(!~galaxy) throw new Error("No entry ID");
+					if(!~galaxy) throw new Error("No Galaxy Saved");
 					try {
 						const response = await axios.put("http://localhost:3000/galaxies/"+galaxy, qs.stringify({
-							name: "The Large Magellanic (LMC)",
-							size: 7e3,
-							description: "LMC is an irregular dwarf galaxies"
+							name: "The Great Void",
+							size: 7e6,
+							description: "The fictional galaxy the neitherlands exists in."
 						}));
 						expect(response.status).toBe(200);
-						expect(response.data.name).toBe("The Large Magellanic (LMC)");
+						expect(response.data.name).toBe("The Great Void");
 					} catch (e) {
 						throw e;
 					}
@@ -117,15 +116,13 @@ const groups = [
 					if (!~galaxy) throw new Error("No Galaxy")
 					try {
 						const response = await axios.post("http://localhost:3000/stars", qs.stringify({
-							name: "Sun",
+							name: "Umbers Rage",
 							size: 865000,
-							description: "The Sun is informally called a yellow dwarf",
+							description: "A fictional star",
 							GalaxyId: galaxy
 						}));
-						console.log(response.data);
 						star = response.data.id;
 						expect(response.status).toBe(200);
-
 					} catch (e) {
 						throw e;
 					}
@@ -136,9 +133,9 @@ const groups = [
 				async () => {
 					try {
 						const response = await axios.post("http://localhost:3000/stars", qs.stringify({
-							name: "Sun",
+							name: "Umbers Rage",
 							size: 865000,
-							description: "The Sun is informally called a yellow dwarf",
+							description: "A fictional star",
 						}));
 						throw {response};
 					} catch ({response:e}) {
@@ -164,13 +161,95 @@ const groups = [
 					try {
 						console.log(star);
 						const response = await axios.put("http://localhost:3000/stars/"+star, qs.stringify({
-							name: "Proxima Centauri",
+							name: "Embers entertainment",
 							size: 133320,
-							description: "Proxima Centauri is a red dwarf"
+							description: "A fictional star"
+						}));
+						expect(response.status).toBe(200);
+						expect(response.data.name).toBe("Embers entertainment");
+					} catch (e) {
+						throw e;
+					}
+				}
+			]
+		]
+	],
+	[
+		`⁉️ Planet resource is available`,
+		[
+			[
+				`Planet List is available`,
+				async () => {
+					try {
+						const response = await axios.get("http://localhost:3000/planets");
+						expect(Array.isArray(response.data)).toBe(true);
+					} catch (e){
+						throw e;
+					}
+				}
+			],
+			[
+				`Creating a Planet`,
+				async () => {
+					if (!~star) throw new Error("No Star")
+					try {
+						const qstr = qs.stringify({
+							name: "Fillory",
+							size: 4e3,
+							description: "A magical land where whimsy is a law of physics",
+							Stars: [star]
+						});
+						console.log(qstr);
+						const response = await axios.post("http://localhost:3000/planets", qstr);
+						planet = response.data.id;
+						expect(response.status).toBe(200);
+
+					} catch (e) {
+						throw e;
+					}
+				}
+			],
+			[
+				`Duplicate names are prevented`,
+				async () => {
+					try {
+						const response = await axios.post("http://localhost:3000/planets", qs.stringify({
+							name: "Fillory",
+							size: 4e3,
+							description: "A magical land where whimsy is a law of physics",
+							Stars: [star]
+						}));
+						throw {response};
+					} catch ({response:e}) {
+						expect(e.status).toBe(422);
+					}
+				}
+			],
+			[
+				`Missing Field insertions are prevented`,
+				async () => {
+					try {
+						const response = await axios.post("http://localhost:3000/planets", qs.stringify({}));
+						throw {response};
+					} catch ({response:e}) {
+						expect(e.status).toBe(422);
+					}
+				}
+			],
+			[
+				`Able to update a planet`,
+				async () => {
+					if(!~planet) throw new Error("No Planet");
+					console.log(planet);
+					try {
+						const response = await axios.put("http://localhost:3000/planets/"+planet, qs.stringify({
+							name: "Fillory",
+							size: 2e3,
+							description: "A magical land where whimsy is a law of physics",
 						}));
 						console.log(response);
 						expect(response.status).toBe(200);
-						expect(response.data.name).toBe("Proxima Centauri");
+						expect(response.data.size).toBe(2e3);
 					} catch (e) {
 						throw e;
 					}
@@ -182,9 +261,21 @@ const groups = [
 		`Cleaning up`,
 		[
 			[
+				`Deleting the Planet made`,
+				async () => {
+					if (!~planet) throw new Error("No planet");
+					try {
+						const response = await axios.delete(`http://localhost:3000/planets/${planet}`);
+						expect(response.status).toBe(200);
+					} catch (e) {
+						throw e;
+					}
+				}
+			],
+			[
 				`Deleting the Star made`,
 				async () => {
-					if (!~star) throw new Error("No entry ID");
+					if (!~star) throw new Error("No star");
 					try {
 						const response = await axios.delete(`http://localhost:3000/stars/${star}`);
 						expect(response.status).toBe(200);
@@ -196,7 +287,7 @@ const groups = [
 			[
 				`Deleting the Galaxy made`,
 				async () => {
-					if (!~galaxy) throw new Error("No entry ID");
+					if (!~galaxy) throw new Error("No galaxy");
 					try {
 						const response = await axios.delete(`http://localhost:3000/galaxies/${galaxy}`);
 						expect(response.status).toBe(200);

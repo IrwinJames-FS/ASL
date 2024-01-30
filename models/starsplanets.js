@@ -3,7 +3,6 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  @Table({timestamp: false})
   class StarsPlanets extends Model {
     /**
      * Helper method for defining associations.
@@ -20,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'StarsPlanets',
+    timestamps: false,
   });
   return StarsPlanets;
 };

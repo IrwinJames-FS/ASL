@@ -28,10 +28,11 @@ const index = async (req, res, next) => {
 const show = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const result = await Planet.findByPk(id);
+    const result = await Planet.findByPk(id, {include: "Stars"});
     if(!result) return next(new NotFoundError(`No planet found at index: ${id}`));
     return res.status(200).json(result);
   } catch (e) {
+    console.log(e);
     return next(new ServerError());
   }
 };
@@ -45,7 +46,9 @@ const show = async (req, res, next) => {
  */
 const create = async (req, res, next) => {
   try {
+    const {Stars, ...body} = req.body; //remove Stars from the set
     const planet = await Planet.create(req.body);
+    await planet.setStars(Stars);
     res.redirect(303, `/planets/${planet.id}`);
   } catch (e) {
     switch (e.constructor) {
@@ -91,15 +94,12 @@ const update = async (req, res, next) => {
  */
 const remove =  async (req, res, next) => {
   const { id } = req.params;
-  console.log(id);
   try {
     await Planet.destroy({
       where:{id},
-      cascade: true, //Suns and planets should not exist without a planet
     });
     return res.redirect(303, `/planets/`);
   } catch (e) {
-    console.log(e);
     return next(e);
   }
 };
