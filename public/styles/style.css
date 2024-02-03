@@ -1,0 +1,276 @@
+/* https://www.joshwcomeau.com/css/custom-css-reset/ */
+/*
+  1. Use a more-intuitive box-sizing model.
+*/
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/*
+2. Remove default margin
+ */
+* {
+  margin: 0;
+}
+
+/*
+Typographic tweaks!
+3. Add accessible line-height
+4. Improve text rendering
+ */
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/*
+5. Improve media defaults
+ */
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/*
+6. Remove built-in form typography styles
+ */
+input, button, textarea, select {
+  font: inherit;
+}
+
+/*
+7. Avoid text overflows
+ */
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+/*
+8. Create a root stacking context
+ */
+#root, #__next {
+  isolation: isolate;
+}
+
+:root {
+  --background-color: #FFF;
+  --foreground-color: #000;
+  --primary-bg-color: rgb(0,100,220);
+  --primary-bg-color-light: rgb(28,128,248);
+  --primary-bg-color-dark: rgb(0, 72, 198);
+  --primary-fg-color: #FFF;
+  --success-bg-color: rgb(28, 220, 28);
+  --success-fg-color: #FFF;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #333;
+    --foreground-color: #FFF;
+    --primary-bg-color: rgb(35, 235, 255);
+    --primary-bg-color-light: rgb(63, 255, 255);
+    --primary-bg-color-dark: rgb(0, 200, 220);
+    --primary-fg-color: #000;
+  }
+}
+/* 
+General color scheme
+*/
+html, body {
+  margin: 0;
+  background: var(--background-color, #fff);
+  color: var(--foreground-color);
+}
+
+/*
+Header Styling
+*/
+header {
+  background: var(--primary-bg-color, #fff);
+  color: var(--primary-fg-color, #000);
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: stretch;
+  box-shadow: 2px 2px 4px #000;
+}
+header h2 {
+  margin-left: 1rem;
+}
+header nav {
+  display: flex;
+  padding-right: 1rem;
+  flex-flow: row nowrap;
+  align-items: stretch;
+  gap: 1rem;
+}
+header nav a {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  color: inherit;
+  font-size: 1.25rem;
+  line-height: 1.25rem;
+  text-decoration: none;
+  position: relative;
+  padding: 0 1rem;
+  z-index: 1;
+}
+header nav a::before {
+  content: "";
+  background-color: var(--primary-bg-color-light);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform: skew(-45deg);
+  box-shadow: 2px 2px 4px #000;
+  z-index: -1;
+}
+header nav a:not(.current):hover::before {
+  background-color: var(--primary-bg-color-dark);
+}
+header nav a.current::before {
+  height: 110%;
+  background-color: var(--primary-bg-color-dark);
+}
+
+main {
+  margin: 1rem;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  box-shadow: 2px 2px 4px #000;
+  overflow: hidden;
+}
+
+form {
+  margin: 1rem 0 0 0;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 2rem;
+}
+
+label:not(.file-upload) {
+  flex: 1;
+  border-bottom: 1px solid;
+  position: relative;
+  display: inline-flex;
+}
+label:not(.file-upload) span {
+  transition: 200ms;
+  position: absolute;
+  line-height: 1rem;
+  top: calc(50% - 0.5rem);
+  font-weight: bold;
+  padding-left: 0.25rem;
+}
+label:not(.file-upload) span:has(+ input:not(:placeholder-shown)), label:not(.file-upload) span:has(+ textarea:not(:placeholder-shown)) {
+  top: -1rem;
+}
+label:not(.file-upload) input {
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+label:not(.file-upload) input[type=number] {
+  --moz-appearance: textfield;
+}
+label:not(.file-upload) input[type=number]::-webkit-inner-spin-button, label:not(.file-upload) input[type=number]::-webkit-outer-spin-button {
+  appearance: none;
+}
+label:not(.file-upload) input[type=number]::-ms-number-input {
+  height: auto;
+}
+label:not(.file-upload) textarea {
+  min-height: 1rem;
+}
+label:not(.file-upload):focus-within {
+  border-bottom-width: 2px;
+  border-bottom-color: var(--primary-bg-color);
+}
+label:not(.file-upload):focus-within span {
+  top: -1rem;
+}
+
+label.file-upload {
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  box-shadow: inset -1px -1px 2px #555, 2px 2px 4px #000;
+}
+label.file-upload:hover {
+  box-shadow: inset -2px -2px 4px #555, 3px 3px 6px #000;
+}
+label.file-upload input {
+  /* Cant use the display:none; property it nullifies the click handler*/
+  visibility: hidden;
+  width: 0;
+}
+
+.row {
+  display: flex;
+  flex-flow: row nowrap;
+}
+.row.space-evenly {
+  justify-content: space-evenly;
+}
+.row.space-between {
+  justify-content: space-between;
+}
+.row.gap-1 {
+  gap: 1rem;
+}
+
+textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+.success {
+  color: var(--success-fg-color);
+  background-color: var(--success-bg-color);
+}
+
+/* Pretty sure sass offers interpolation methods that would allow this to be greatly simplified. I'll look into that later*/
+.primary {
+  color: var(--primary-fg-color);
+}
+.primary:not(.light, .dark) {
+  background-color: var(--primary-bg-color);
+}
+.primary.light {
+  background-color: var(--primary-bg-color-light);
+}
+.primary.dark {
+  background-color: var(--primary-bg-color-dark);
+}
+.primary.hover:hover:not(.hover-light, .hover-dark) {
+  background-color: var(--primary-bg-color);
+}
+.primary.hover:hover.hover-light {
+  background-color: var(--primary-bg-color-light);
+}
+.primary.hover:hover.hover-dark {
+  background-color: var(--primary-bg-color-dark);
+}
+
+button {
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  box-shadow: inset -2px -2px 2px #555, 2px 2px 4px #000;
+}
+button:hover {
+  box-shadow: inset -3px -3px 3px #555, 3px 3px 6px #000;
+}
+
+#image-upload svg {
+  fill: var(--primary-bg-color-light);
+  stroke: var(--primary-fg-color);
+}
+#image-upload svg text {
+  font-size: 2rem;
+  font-weight: bold;
+  fill: var(--primary-fg-color);
+}
+
+/*# sourceMappingURL=style.css.map */

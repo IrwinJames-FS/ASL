@@ -1,0 +1,27 @@
+<main>
+	<form 
+		enctype="multipart/form-data"
+		action={{formAction}} 
+		method="POST">
+		<div class="row space-between">
+			<h3>{{formName}}</h3>
+			<button type="submit" class="success"><i class="fa fa-save"></i></button>
+		</div>
+		{% include "partials/imageUpload.twig" %}
+		<div class="row gap-1">
+			<label>
+				<span>Name</span>
+				<input type="text" name="name" placeholder=""/>
+			</label>
+			<label>
+				<span>Size</span>
+				<input pattern="\d" name="size" placeholder="" type="number"/>
+			</label>
+		</div>
+		{% block relational_content %}{% endblock %}
+		<label>
+			<span>Description</span>
+			<textarea placeholder="" name="description" ></textarea>
+		</label>
+	</form>
+</main>

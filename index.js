@@ -6,12 +6,20 @@ const app           = express()
 
 //accept url encoded data
 app.use(express.urlencoded({extended: true}));
+
+//handle file uploads
+const fileUpload = require("express-fileupload");
+app.use(fileUpload());
 // Load in our RESTful routers
 const planetRouter  = require(`./routers/planet.js`)
 const starRouter    = require(`./routers/star.js`)
 const galaxyRouter  = require(`./routers/galaxy.js`)
 const { ServerError, NotFoundError } = require("./errors.js")
 
+app.set("views", __dirname + '/views');
+app.set("view engine", "twig");
+
+app.use(express.static(__dirname + "/public"));
 // Home page
 app.get('/', (req, res) => {
   res.status(200).send('Welcome to Star Tracker Library')

@@ -1,0 +1,23 @@
+:root {
+	--background-color: #FFF;
+	--foreground-color: #000;
+
+	--primary-bg-color: rgb(0,100,220);
+	--primary-bg-color-light: rgb(28,128,248);
+	--primary-bg-color-dark: rgb(0, 72, 198);
+	--primary-fg-color: #FFF;
+
+	--success-bg-color: rgb(28, 220, 28);
+	--success-fg-color: #FFF;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root{
+		--background-color: #333;
+		--foreground-color: #FFF;
+		--primary-bg-color: rgb(35, 235, 255);
+		--primary-bg-color-light: rgb(63, 255, 255);
+		--primary-bg-color-dark: rgb(0, 200, 220);
+		--primary-fg-color: #000;
+	}
+}

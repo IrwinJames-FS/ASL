@@ -1,0 +1,23 @@
+<header>
+	<h2>{{title}}</h2>
+
+	{% set navItems = [
+		{
+			href: "/planets",
+			text: "Planets"
+		},
+		{
+			href: "/stars",
+			text: "Stars",
+		},
+		{
+			href: "/galaxies",
+			text: "Galaxies"
+		}
+	] %}
+	<nav>
+		{% for item in navItems %}
+			<a href={{item.href}} class={% if loop.index == navIndex %}"current"{% endif %}>{{item.text}}</a>
+		{% endfor %}
+	</nav>
+</header>
