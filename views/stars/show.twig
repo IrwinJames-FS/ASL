@@ -1,0 +1,20 @@
+{% extends "stars/_default.twig" %}
+
+{% block main_content %}
+<div class="row space-between">
+	<h1>{{star.name}}</h1>
+	<p>{{star.size}}lightyears</p>
+</div>
+
+<p>{{star.description}}</p>
+
+<section class="grid">
+	{% for image in galaxy.Images%}
+		<div class="image-container">
+			<img src="/uploads/galaxies/{{image.id}}{{image.extension}}"/>
+			<p>{{image.caption}}</p>
+		</div>
+		
+	{% endfor %}
+</section>
+{% endblock %}

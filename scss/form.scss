@@ -1,0 +1,74 @@
+@use "mixins" as *;
+form {
+	@include flex(column, flex-start);
+	gap: 2rem;
+}
+
+.field {
+	flex: 1;
+	@include flex(column, center);
+	position: relative;
+	border-bottom: 1px solid var(--fg);
+	&.fixed{
+		flex:0;
+		height: 2rem;
+	}
+	span{
+		position: absolute;
+		left: 0.25rem;
+		top: calc(50% - 1rem);
+		transition: 200ms;
+
+		&:has(+ input:not(:placeholder-shown)), &:has(+ textarea:not(:placeholder-shown)){
+			top: -1.25rem;
+		}
+	}
+	input, textarea{
+		border: none;
+		outline: none;
+		height: 2rem;
+		background-color:transparent;
+	}
+	&:focus-within{
+		span{
+			top: -1.25rem;
+		}
+	}
+
+	
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.file-upload{
+	span {
+
+		cursor: pointer;
+	}
+	input{
+		visibility: hidden;
+		width: 0px;
+	}
+	
+}
+
+#image-upload{
+	.images {
+		@include flex(column, flex-start, stretch);
+		gap:1rem;
+		margin: 0.5rem 0;
+		img{
+			max-width: 10rem;
+		}
+	}
+}

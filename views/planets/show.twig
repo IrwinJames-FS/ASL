@@ -1,0 +1,25 @@
+{% extends "planets/_default.twig" %}
+
+{% block main_content %}
+<div class="row space-between">
+	<h1>{{galaxy.name}}</h1>
+	<div class="row justify-end gap-1">
+		<p>{{galaxy.size}}lightyears</p>
+		<a href="/planets/{{galaxy.id}}/edit" class="button primary"><i class="fa fa-edit"></i></a>
+		<a href="/planets/{{galaxy.id}}/delete" class="button error" onclick="return dref(event, 'Are you sure?', 'This cannot be undone!')"><i class="fa fa-trash"></i></a>
+	</div>
+	
+</div>
+
+<p>{{galaxy.description}}</p>
+
+<section class="grid">
+	{% for image in planet.Images%}
+		<div class="image-container">
+			<img src="{{image.src}}"/>
+			<p>{{image.caption}}</p>
+		</div>
+		
+	{% endfor %}
+</section>
+{% endblock %}

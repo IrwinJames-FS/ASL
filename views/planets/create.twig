@@ -1,0 +1,12 @@
+{% extends "layouts/_default.twig" %}
+
+{% block page_title %}{{"Create a Planet"}}{% endblock %}
+{% block addt_heads %}
+	<link rel="stylesheet" href="/styles/form.css"/>
+{% endblock %}
+{% block addt_scripts %}
+	<script src="/scripts/formHandler.js" type="module"></script>
+{% endblock %}
+{% block main_content %}
+	{% include "planets/form.twig" with {formName: "Create a Planet", formAction:"/planets", formValues: {name: "", description: "", size: ""}}%}
+{% endblock %}

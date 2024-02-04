@@ -13,6 +13,14 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       models.Star.belongsTo(models.Galaxy);
       models.Star.belongsToMany(models.Planet, {through: "StarsPlanets", onDelete:"cascade"});
+      models.Star.hasMany(models.Image, { 
+        foreignKey: `resourceId`,
+        constraints: false,
+        scope: {
+          resource: 'stars'
+        },
+        as: "Images"
+      }); //The collection of images 
     }
   }
   Star.init({

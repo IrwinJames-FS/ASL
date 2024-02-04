@@ -1,27 +1,40 @@
 :root {
-	--background-color: #FFF;
-	--foreground-color: #000;
+	--bg: #fff;
+	--fg: #000;
 
-	--primary-bg-color: rgb(0,100,220);
-	--primary-bg-color-light: rgb(28,128,248);
-	--primary-bg-color-dark: rgb(0, 72, 198);
-	--primary-fg-color: #FFF;
+	--primary-bg: rgb(28, 128, 248);
+	--primary-bg-light: rgb(35, 135, 255);
+	--primary-bg-dark: rgb(0, 100, 220);
+	--primary-fg: #fff;
 
-	--success-bg-color: rgb(28, 220, 28);
-	--success-fg-color: #FFF;
+	--success-bg: rgb(0, 200, 0);
+	--success-bg-dark: rgb(0, 180, 0);
+	--success-fg: #fff;
 
-	--grid-size: 6;
-
+	--error-bg: rgb(235, 28, 28);
+	--error-bg-light: rgb(255, 50, 50);
+	--error-bg-dark: rgb(220, 0, 0);
+	--error-fg: #fff;
 
 }
 
 @media (prefers-color-scheme: dark) {
 	:root{
-		--background-color: #333;
-		--foreground-color: #FFF;
-		--primary-bg-color: rgb(35, 235, 255);
-		--primary-bg-color-light: rgb(63, 255, 255);
-		--primary-bg-color-dark: rgb(0, 200, 220);
-		--primary-fg-color: #000;
+		--bg: #333;
+		--fg: #fff;
+
+		--primary-bg: rgb(80, 215, 240);
+		--primary-bg-light: rgb(100, 235, 255);
+		--primary-bg-dark: rgb(60, 195, 220);
+		--primary-fg: #000;
+
+		--success-bg: rgb(128, 255, 128);
+		--success-bg-dark: rgb(100, 228, 100);
+		--success-fg: #000;
+
+		--error-bg: rgb(235, 128, 128);
+		--error-bg-light: rgb(255, 150, 150);
+		--error-bg-dark: rgb(220, 100, 100);
+		--error-fg: #000;
 	}
 }

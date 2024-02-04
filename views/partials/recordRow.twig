@@ -1,0 +1,15 @@
+{% set image = (record.Images|length > 0) ? record.Images[0]: null%}
+{% set imgsrc = (image is defined) ? image.src:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/256px-No-Image-Placeholder.svg.png" %}
+<div class="row gap-1 shadowed clipped rounded">
+	<img src="{{imgsrc}}" class="mw-10"/>
+	<div class="column expand">
+		<div class="row space-between">
+			<h4><a href="/{{resource}}/{{record.id}}">{{record.name}}</a></h4>
+			<nav class="row justify-end gap-1">
+				<a href="/{{resource}}/{{record.id}}/edit" class="button primary"><i class="fa fa-edit"></i></a>
+				<a href="/{{resource}}/{{record.id}}/delete" class="button error" onclick="return dref(event, 'Are you sure?', 'This operation cannot be undone');"><i class="fa fa-trash"></i></a>
+			</nav>
+		</div>
+		<p>{{record.description}}</p>
+	</div>
+</div>

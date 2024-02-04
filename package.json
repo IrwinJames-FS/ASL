@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch:scss": "sass --watch scss/style.scss public/styles/style.css",
+    "watch:scss": "sass --watch scss/style.scss:public/styles/style.css scss/form.scss:public/styles/form.css",
     "watch": "nodemon -e twig,json,js index.js && npm run watch:scss",
     "load": "node ./load-data.js",
     "test": "jest space-tracker.test.js"
@@ -20,6 +20,7 @@
     "sequelize-cli": "^6.6.2"
   },
   "dependencies": {
+    "body-parser": "^1.20.2",
     "express": "^4.18.2",
     "express-fileupload": "^1.4.3",
     "mysql2": "^3.9.0",

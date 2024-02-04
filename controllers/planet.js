@@ -11,8 +11,18 @@ const { ValidationError: SequelizeValidationError, UniqueConstraintError, Databa
  */
 const index = async (req, res, next) => {
   try {
-    const results = await Planet.findAll(); //Implement limit and offset methods\
+    const planets = await Planet.findAll({include: ["Images"]}); //Implement limit and offset methods\
+    if(req.headers["content-type"] == "application/json"){
+      return res.status(200).json(planets);
+    }
+    res.render("planets/index", {planets});
+  } catch (e) {
+    return next(new ServerError(e.message));
+  }
+  try {
+    
     return res.status(200).json(results);
+    
   } catch (e) {
     return next(new ServerError(e.message));
   }
@@ -28,9 +38,12 @@ const index = async (req, res, next) => {
 const show = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const result = await Planet.findByPk(id, {include: "Stars"});
-    if(!result) return next(new NotFoundError(`No planet found at index: ${id}`));
-    return res.status(200).json(result);
+    const planet = await Planet.findByPk(id, {include: ["Images"]});
+    if(!planet) return next(new NotFoundError(`No planet found at index: ${id}`));
+    if(req.headers["content-type"] == "application/json"){
+      return res.status(200).json(planet);
+    }
+    res.render("planets/show", {planet})
   } catch (e) {
     console.log(e);
     return next(new ServerError());
@@ -47,9 +60,10 @@ const show = async (req, res, next) => {
 const create = async (req, res, next) => {
   try {
     const {Stars, ...body} = req.body; //remove Stars from the set
-    const planet = await Planet.create(req.body);
+    const {id} = await Planet.create(body); //Only save the Image reference if the Refence exists
     await planet.setStars(Stars);
-    res.redirect(303, `/planets/${planet.id}`);
+    res.locals.resourceId = id;
+    return next(); //Let the middleware take the wheel
   } catch (e) {
     switch (e.constructor) {
       case UniqueConstraintError:
@@ -72,9 +86,10 @@ const create = async (req, res, next) => {
 const update = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const planet = await Planet.update(req.body, {where:{id}});
-    if(!planet) return next(new NotFoundError("This planet was not found int the database"));
-    res.redirect(303, `/planets/${id}`);
+    const [planet] = await Galaxy.update(req.body, {where:{id}});
+    if(!planet) return next(new NotFoundError("This galaxy was not found int the database"));
+    res.locals.resourceId = planet;
+    return next();
   } catch (e) {
     switch (e.constructor) {
       case UniqueConstraintError:
@@ -97,6 +112,7 @@ const remove =  async (req, res, next) => {
   try {
     await Planet.destroy({
       where:{id},
+      individualHooks: true
     });
     return res.redirect(303, `/planets/`);
   } catch (e) {
@@ -104,4 +120,31 @@ const remove =  async (req, res, next) => {
   }
 };
 
-module.exports = { index, show, create, update, remove }
+/*
+HTML 5 specific routes
+* HTML 5 specific routes dont are only intended to deliver html.
+*/
+
+const mknew = (req, res) => {
+  res.render("planets/create");
+};
+
+/**
+ 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+const edit = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const planet = await Galaxy.findByPk(id, {include: ["Images"]});
+    if(!planet) return next(new NotFoundError(`No planet found at index: ${id}`));
+    res.render("planets/edit", {galaxy})
+  } catch (e) {
+    console.log(e);
+    return next(new ServerError());
+  }
+};
+
+module.exports = { index, show, create, update, remove, mknew, edit };

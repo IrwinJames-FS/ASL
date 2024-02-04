@@ -53,55 +53,52 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 :root {
-  --background-color: #FFF;
-  --foreground-color: #000;
-  --primary-bg-color: rgb(0,100,220);
-  --primary-bg-color-light: rgb(28,128,248);
-  --primary-bg-color-dark: rgb(0, 72, 198);
-  --primary-fg-color: #FFF;
-  --success-bg-color: rgb(28, 220, 28);
-  --success-fg-color: #FFF;
-  --grid-size: 6;
+  --bg: #fff;
+  --fg: #000;
+  --primary-bg: rgb(28, 128, 248);
+  --primary-bg-light: rgb(35, 135, 255);
+  --primary-bg-dark: rgb(0, 100, 220);
+  --primary-fg: #fff;
+  --success-bg: rgb(0, 200, 0);
+  --success-bg-dark: rgb(0, 180, 0);
+  --success-fg: #fff;
+  --error-bg: rgb(235, 28, 28);
+  --error-bg-light: rgb(255, 50, 50);
+  --error-bg-dark: rgb(220, 0, 0);
+  --error-fg: #fff;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background-color: #333;
-    --foreground-color: #FFF;
-    --primary-bg-color: rgb(35, 235, 255);
-    --primary-bg-color-light: rgb(63, 255, 255);
-    --primary-bg-color-dark: rgb(0, 200, 220);
-    --primary-fg-color: #000;
+    --bg: #333;
+    --fg: #fff;
+    --primary-bg: rgb(80, 215, 240);
+    --primary-bg-light: rgb(100, 235, 255);
+    --primary-bg-dark: rgb(60, 195, 220);
+    --primary-fg: #000;
+    --success-bg: rgb(128, 255, 128);
+    --success-bg-dark: rgb(100, 228, 100);
+    --success-fg: #000;
+    --error-bg: rgb(235, 128, 128);
+    --error-bg-light: rgb(255, 150, 150);
+    --error-bg-dark: rgb(220, 100, 100);
+    --error-fg: #000;
   }
 }
-/* 
-General color scheme
-*/
-html, body {
-  margin: 0;
-  background: var(--background-color, #fff);
-  color: var(--foreground-color);
-}
-
-/*
-Header Styling
-*/
 header {
-  background: var(--primary-bg-color, #fff);
-  color: var(--primary-fg-color, #000);
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: stretch;
+  background-color: var(--primary-bg-light);
+  color: var(--primary-fg);
   box-shadow: 2px 2px 4px #000;
-}
-header h2 {
-  margin-left: 1rem;
+  padding: 0 1rem;
 }
 header nav {
   display: flex;
-  padding-right: 1rem;
   flex-flow: row nowrap;
+  justify-content: flex-end;
   align-items: stretch;
   gap: 1rem;
 }
@@ -111,32 +108,45 @@ header nav a {
   justify-content: center;
   align-items: center;
   color: inherit;
-  font-size: 1.25rem;
-  line-height: 1.25rem;
   text-decoration: none;
   position: relative;
-  padding: 0 1rem;
   z-index: 1;
+  padding: 0 1rem;
 }
 header nav a::before {
   content: "";
-  background-color: var(--primary-bg-color-light);
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  transform: skew(-45deg);
-  box-shadow: 2px 2px 4px #000;
   z-index: -1;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: var(--primary-bg);
+  box-shadow: 2px 2px 4px #000;
+  transform: skew(-45deg);
+  transition: 200ms;
 }
-header nav a:not(.current):hover::before {
-  background-color: var(--primary-bg-color-dark);
+header nav a:hover::before, header nav a.current::before {
+  top: 0;
+  height: 105%;
+  background-color: var(--primary-bg-dark);
+  box-shadow: 3px 3px 6px #000;
 }
-header nav a.current::before {
-  height: 110%;
-  background-color: var(--primary-bg-color-dark);
+
+/* 
+General color scheme
+*/
+html, body {
+  margin: 0;
+  background: var(--bg, #fff);
+  color: var(--fg);
+  font-size: 1.25rem;
 }
 
 main {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 1rem;
   margin: 1rem;
   padding: 1rem;
   border-radius: 0.25rem;
@@ -144,86 +154,31 @@ main {
   overflow: hidden;
 }
 
-form {
-  margin: 1rem 0 0 0;
-  display: flex;
-  flex-flow: column nowrap;
-  gap: 2rem;
-}
-
-label:not(.file-upload, .image-selection) {
-  flex: 1;
-  border-bottom: 1px solid;
-  position: relative;
-  display: inline-flex;
-}
-label:not(.file-upload, .image-selection) span {
-  transition: 200ms;
-  position: absolute;
-  line-height: 1rem;
-  top: calc(50% - 0.5rem);
-  font-weight: bold;
-  padding-left: 0.25rem;
-}
-label:not(.file-upload, .image-selection) span:has(+ input:not(:placeholder-shown)), label:not(.file-upload, .image-selection) span:has(+ textarea:not(:placeholder-shown)) {
-  top: -1rem;
-}
-label:not(.file-upload, .image-selection) input {
-  border: none;
-  background-color: transparent;
-  outline: none;
-}
-label:not(.file-upload, .image-selection) input[type=number] {
-  --moz-appearance: textfield;
-}
-label:not(.file-upload, .image-selection) input[type=number]::-webkit-inner-spin-button, label:not(.file-upload, .image-selection) input[type=number]::-webkit-outer-spin-button {
-  appearance: none;
-}
-label:not(.file-upload, .image-selection) input[type=number]::-ms-number-input {
-  height: auto;
-}
-label:not(.file-upload, .image-selection) textarea {
-  min-height: 1rem;
-}
-label:not(.file-upload, .image-selection):focus-within {
-  border-bottom-width: 2px;
-  border-bottom-color: var(--primary-bg-color);
-}
-label:not(.file-upload, .image-selection):focus-within span {
-  top: -1rem;
-}
-
-label.file-upload {
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  box-shadow: inset -1px -1px 2px #555, 2px 2px 4px #000;
-}
-label.file-upload:hover {
-  box-shadow: inset -2px -2px 4px #555, 3px 3px 6px #000;
-}
-label.file-upload input {
-  /* Cant use the display:none; property it nullifies the click handler*/
-  visibility: hidden;
-  width: 0;
-}
-
 .row {
   display: flex;
   flex-flow: row nowrap;
 }
-.row.space-evenly {
+
+.column {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.row.space-evenly, .column.space-evenly {
   justify-content: space-evenly;
 }
-.row.space-between {
+.row.space-between, .column.space-between {
   justify-content: space-between;
 }
-.row.gap-1 {
+.row.justify-end, .column.justify-end {
+  justify-content: flex-end;
+}
+.row.gap-1, .column.gap-1 {
   gap: 1rem;
 }
 
-textarea {
-  width: 100%;
-  resize: vertical;
+.expand {
+  flex: 1;
 }
 
 .success {
@@ -231,63 +186,97 @@ textarea {
   background-color: var(--success-bg-color);
 }
 
-/* Pretty sure sass offers interpolation methods that would allow this to be greatly simplified. I'll look into that later*/
-.primary {
-  color: var(--primary-fg-color);
-}
-.primary:not(.light, .dark) {
-  background-color: var(--primary-bg-color);
-}
-.primary.light {
-  background-color: var(--primary-bg-color-light);
-}
-.primary.dark {
-  background-color: var(--primary-bg-color-dark);
-}
-.primary.hover:hover:not(.hover-light, .hover-dark) {
-  background-color: var(--primary-bg-color);
-}
-.primary.hover:hover.hover-light {
-  background-color: var(--primary-bg-color-light);
-}
-.primary.hover:hover.hover-dark {
-  background-color: var(--primary-bg-color-dark);
-}
-
-button {
+.button, button {
   border: none;
-  padding: 0.5rem 1rem;
+  box-shadow: 2px 2px 4px #000;
+  height: 2rem;
+  line-height: 2rem;
+  padding: 0 0.5rem;
   border-radius: 0.25rem;
-  box-shadow: inset -2px -2px 2px #555, 2px 2px 4px #000;
+  color: inherit;
+  display: inline-block;
 }
-button:hover {
-  box-shadow: inset -3px -3px 3px #555, 3px 3px 6px #000;
+.button:hover, button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 3px 3px 6px #000;
+}
+.button.primary, button.primary {
+  background-color: var(--primary-bg);
+  color: var(--primary-fg);
+}
+.button.primary:hover, button.primary:hover {
+  background-color: var(--primary-bg-dark);
+}
+.button.success, button.success {
+  background-color: var(--success-bg);
+  color: var(--success-fg);
+}
+.button.success:hover, button.success:hover {
+  background-color: var(--success-bg-dark);
+}
+.button.error, button.error {
+  background-color: var(--error-bg);
+  color: var(--error-fg);
+}
+.button.error:hover, button.error:hover {
+  background-color: var(--error-bg-dark);
 }
 
-#image-upload {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 1rem;
+.shadowed {
+  box-shadow: 2px 2px 4px #000;
 }
-#image-upload #preview {
+
+.clipped {
+  overflow: hidden;
+}
+
+.rounded {
+  border-radius: 0.25rem;
+}
+
+.grid {
   display: grid;
-  grid-template-columns: repeat(var(--grid-size, 4), minmax(0, 1fr));
   gap: 1rem;
-}
-#image-upload #preview label {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-between;
-  box-shadow: 2px 2px 4px #555;
-}
-#image-upload #preview label input {
-  margin: 1rem;
+  grid-template-columns: repeat(4, 1fr);
 }
 
-img.default-image {
+.mw-10 {
   max-width: 10rem;
+}
+
+.image-container {
+  position: relative;
+}
+.image-container p {
+  position: absolute;
+  padding: 0 0.25rem;
+  width: 100%;
+  height: 2rem;
+  bottom: 0;
+  backdrop-filter: blur(8px);
+  color: #fff;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+#modal-overlay {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+}
+#modal-overlay .modal-hero {
+  background-color: var(--bg);
+  color: var(--fg);
+  padding: 1rem;
+  border-radius: 0.25rem;
+  box-shadow: 2px 2px 4px #000;
 }
 
 /*# sourceMappingURL=style.css.map */

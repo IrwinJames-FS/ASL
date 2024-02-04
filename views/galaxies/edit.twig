@@ -1,5 +1,12 @@
-{% extends "galaxies/_default.twig" %}
+{% extends "layouts/_default.twig" %}
 
+{% block page_title %}{{"Edit " ~ galaxy.name}}{% endblock %}
+{% block addt_heads %}
+	<link rel="stylesheet" href="/styles/form.css"/>
+{% endblock %}
+{% block addt_scripts %}
+	<script src="/scripts/formHandler.js" type="module"></script>
+{% endblock %}
 {% block main_content %}
-	{% include "partials/form.twig" with {"formName": (galaxy is defined) ? "Edit #{galaxy.name}":"Create a Galaxy", "formAction": "/galaxies"} %}
+	{% include "galaxies/form.twig" with {formName: "Edit " ~ galaxy.name, formAction: null, formValues: galaxy}%}
 {% endblock %}

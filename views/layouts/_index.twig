@@ -1,0 +1,14 @@
+{% extends "layouts/_default.twig" %}
+
+{% block page_title %}Star Tracker | {{resource}}{% endblock %}
+{% block main_content %}
+<div class="row space-between rounded shadowed">
+	<h4>{{resource|capitalize}}</h4>
+	<a href="/{{resource}}/create" class="button primary">
+		<i class="fa fa-add"></i>
+	</a>
+</div>
+{% for record in records %}
+{% include "partials/recordRow.twig" with {"record":record, "resource":resource} %}
+{% endfor %}
+{% endblock %}

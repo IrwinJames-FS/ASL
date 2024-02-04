@@ -11,9 +11,13 @@ const { ValidationError: SequelizeValidationError, UniqueConstraintError, Databa
  */
 const index = async (req, res, next) => {
   try {
-    const results = await Galaxy.findAll(); //Implement limit and offset methods\
-    //return res.status(200).json(results);
-    res.render("galaxies/index");
+    const galaxies = await Galaxy.findAll({include: ["Images"]}); //Implement limit and offset methods\
+    
+    console.log(req.headers);
+    if(req.headers["content-type"] == "application/json"){
+      return res.status(200).json(galaxies);
+    }
+    res.render("galaxies/index", {galaxies});
   } catch (e) {
     return next(new ServerError(e.message));
   }
@@ -29,9 +33,12 @@ const index = async (req, res, next) => {
 const show = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const galaxy = await Galaxy.findByPk(id, {include: ["Images", "Image"]});
+    const galaxy = await Galaxy.findByPk(id, {include: ["Images"]});
     if(!galaxy) return next(new NotFoundError(`No galaxy found at index: ${id}`));
-    res.render("galaxies/show", {galaxy})
+    if(req.headers["content-type"] == "application/json"){
+      return res.status(200).json(galaxy);
+    }
+    res.render("galaxies/show", {record:galaxy})
   } catch (e) {
     console.log(e);
     return next(new ServerError());
@@ -46,15 +53,12 @@ const show = async (req, res, next) => {
  * @returns 
  */
 const create = async (req, res, next) => {
-  const {Image, ...body} = req.body;
-  const isNewImage = Image && Image.startsWith("n-");
   try {
-    const {id} = await Galaxy.create(isNewImage? body:{...body, Image}); //Only save the Image reference if the Refence exists
-    if(isNewImage) res.locals.newDefaultImage = parseInt(Image.slice(2));
+    const {id} = await Galaxy.create(req.body); //Only save the Image reference if the Refence exists
     res.locals.resourceId = id;
+    
     return next(); //Let the middleware take the wheel
   } catch (e) {
-    console.log(e);
     switch (e.constructor) {
       case UniqueConstraintError:
         return next(new ValidationError("Duplicate Unique Value", e.errors));
@@ -76,9 +80,10 @@ const create = async (req, res, next) => {
 const update = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const galaxy = await Galaxy.update(req.body, {where:{id}});
+    const [galaxy] = await Galaxy.update(req.body, {where:{id}});
     if(!galaxy) return next(new NotFoundError("This galaxy was not found int the database"));
-    res.redirect(303, `/galaxies/${id}`);
+    res.locals.resourceId = galaxy;
+    return next();
   } catch (e) {
     switch (e.constructor) {
       case UniqueConstraintError:
@@ -109,28 +114,29 @@ const remove =  async (req, res, next) => {
 
 /*
 HTML 5 specific routes
+* HTML 5 specific routes dont are only intended to deliver html.
 */
 
 const mknew = (req, res) => {
-  res.render("galaxies/edit");
-}
+  res.render("galaxies/create");
+};
 
 /**
- * This method will be used to reassign the imageId if necessary
- * @param {import("express").Request} req 
- * @param {import("express").Response} res 
- * @param {import("express").NextFunction} next 
+ 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
  */
-const updateImage = async (req, res, next) => {
-  console.log("Finally updating the image", res.locals.resourceId, res.locals.newDefaultImage, res.locals.images);
-  const id = res.locals.resourceId;
-  const imgIndex = res.locals.newDefaultImage;
-  if(imgIndex)  {
-    
-    const ImageId = res.locals.images[imgIndex].id;
-    console.log(ImageId, imgIndex, res.locals.images);
-    await Galaxy.update({ImageId}, {where:{id}});
+const edit = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const galaxy = await Galaxy.findByPk(id, {include: ["Images"]});
+    if(!galaxy) return next(new NotFoundError(`No galaxy found at index: ${id}`));
+    res.render("galaxies/edit", {galaxy})
+  } catch (e) {
+    console.log(e);
+    return next(new ServerError());
   }
-  res.redirect(303, `/galaxies/${id}`);
-}
-module.exports = { index, show, create, update, remove, mknew, updateImage }
+};
+
+module.exports = { index, show, create, update, remove, mknew, edit }

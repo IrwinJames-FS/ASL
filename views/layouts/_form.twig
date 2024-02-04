@@ -1,0 +1,43 @@
+<form 
+	enctype="multipart/form-data"
+	action="{{formAction}}"
+	method="POST">
+	<div class="row space-between">
+		<h4>{{formName}}</h4>
+		<button class="success"><i class="fa fa-save"></i></button>
+	</div>
+	<div class="row gap-1">
+		<label class="field">
+			<span>Name</span>
+			<input type="text" name="name" value="{{formValues.name}}" placeholder=""/>
+		</label>
+		<label class="field">
+			<span>Size</span>
+			<input type="number" name="size" value="{{formValues.size}}" placeholder=""/>
+		</label>
+	</div>
+	<div class="row">
+		<label class="field">
+			<span>Description</span>
+			<textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' placeholder="" name="description">{{formValues.description}}</textarea>
+		</label>
+	</div>
+	<div id="#images-editor">
+		{% for image in formValues.Images %}
+			<div class="row">
+				<img class="mw-10" src="{{image.src}}" alt={{image.caption}}/>
+				<div class="column space-between expand">
+					<div class="row justify-end">
+						<input type="hidden" name="imagesId" value="{{image.id}}"/> 
+						<button type="button" class="error" onclick="removeImage(event, {{image.id}})"><i class="fa fa-trash"></i></button>
+					</div> 
+					<label class="field fixed">
+						<span>Caption</span>
+						<input type="text" name="updatessCaption" value="{{image.caption}}"/>
+					</label>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+	{% include "partials/imageUpload.twig" %}
+</form>

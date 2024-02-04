@@ -1,0 +1,73 @@
+form {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 2rem;
+}
+
+.field {
+  flex: 1;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: stretch;
+  position: relative;
+  border-bottom: 1px solid var(--fg);
+}
+.field.fixed {
+  flex: 0;
+  height: 2rem;
+}
+.field span {
+  position: absolute;
+  left: 0.25rem;
+  top: calc(50% - 1rem);
+  transition: 200ms;
+}
+.field span:has(+ input:not(:placeholder-shown)), .field span:has(+ textarea:not(:placeholder-shown)) {
+  top: -1.25rem;
+}
+.field input, .field textarea {
+  border: none;
+  outline: none;
+  height: 2rem;
+  background-color: transparent;
+}
+.field:focus-within span {
+  top: -1.25rem;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.file-upload span {
+  cursor: pointer;
+}
+.file-upload input {
+  visibility: hidden;
+  width: 0px;
+}
+
+#image-upload .images {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 1rem;
+  margin: 0.5rem 0;
+}
+#image-upload .images img {
+  max-width: 10rem;
+}
+
+/*# sourceMappingURL=form.css.map */

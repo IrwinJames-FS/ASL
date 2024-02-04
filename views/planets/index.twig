@@ -1,0 +1,14 @@
+{% extends "planets/_default.twig" %}
+
+{% block page_title %}Star Tracker | Galaxies{% endblock %}
+{% block main_content %}
+<div class="row space-between rounded shadowed">
+	<h4>Galaxies</h4>
+	<a href="/planets/create" class="button primary">
+		<i class="fa fa-add"></i>
+	</a>
+</div>
+{% for planet in planets %}
+{% include "partials/recordRow.twig" with {"record":planet, "resource":"planets"} %}
+{% endfor %}
+{% endblock %}

@@ -1,1 +1,3 @@
-export * from "./uploadImage";
+const uploadImages = require("./uploadImage.js");
+
+module.exports = {...uploadImages};

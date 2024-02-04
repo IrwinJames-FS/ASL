@@ -1,0 +1,13 @@
+{% extends "stars/_default.twig" %}
+
+{% block main_content %}
+<div class="row space-between rounded shadowed">
+	<h4>Stars</h4>
+	<a href="/stars/create" class="button primary">
+		<i class="fa fa-add"></i>
+	</a>
+</div>
+{% for star in stars %}
+{% include "partials/recordRow.twig" with {"record": star, "resource":"stars"} %}
+{% endfor %}
+{% endblock %}
