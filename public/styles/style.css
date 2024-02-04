@@ -61,6 +61,7 @@ p, h1, h2, h3, h4, h5, h6 {
   --primary-fg-color: #FFF;
   --success-bg-color: rgb(28, 220, 28);
   --success-fg-color: #FFF;
+  --grid-size: 6;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -150,13 +151,13 @@ form {
   gap: 2rem;
 }
 
-label:not(.file-upload) {
+label:not(.file-upload, .image-selection) {
   flex: 1;
   border-bottom: 1px solid;
   position: relative;
   display: inline-flex;
 }
-label:not(.file-upload) span {
+label:not(.file-upload, .image-selection) span {
   transition: 200ms;
   position: absolute;
   line-height: 1rem;
@@ -164,31 +165,31 @@ label:not(.file-upload) span {
   font-weight: bold;
   padding-left: 0.25rem;
 }
-label:not(.file-upload) span:has(+ input:not(:placeholder-shown)), label:not(.file-upload) span:has(+ textarea:not(:placeholder-shown)) {
+label:not(.file-upload, .image-selection) span:has(+ input:not(:placeholder-shown)), label:not(.file-upload, .image-selection) span:has(+ textarea:not(:placeholder-shown)) {
   top: -1rem;
 }
-label:not(.file-upload) input {
+label:not(.file-upload, .image-selection) input {
   border: none;
   background-color: transparent;
   outline: none;
 }
-label:not(.file-upload) input[type=number] {
+label:not(.file-upload, .image-selection) input[type=number] {
   --moz-appearance: textfield;
 }
-label:not(.file-upload) input[type=number]::-webkit-inner-spin-button, label:not(.file-upload) input[type=number]::-webkit-outer-spin-button {
+label:not(.file-upload, .image-selection) input[type=number]::-webkit-inner-spin-button, label:not(.file-upload, .image-selection) input[type=number]::-webkit-outer-spin-button {
   appearance: none;
 }
-label:not(.file-upload) input[type=number]::-ms-number-input {
+label:not(.file-upload, .image-selection) input[type=number]::-ms-number-input {
   height: auto;
 }
-label:not(.file-upload) textarea {
+label:not(.file-upload, .image-selection) textarea {
   min-height: 1rem;
 }
-label:not(.file-upload):focus-within {
+label:not(.file-upload, .image-selection):focus-within {
   border-bottom-width: 2px;
   border-bottom-color: var(--primary-bg-color);
 }
-label:not(.file-upload):focus-within span {
+label:not(.file-upload, .image-selection):focus-within span {
   top: -1rem;
 }
 
@@ -263,14 +264,30 @@ button:hover {
   box-shadow: inset -3px -3px 3px #555, 3px 3px 6px #000;
 }
 
-#image-upload svg {
-  fill: var(--primary-bg-color-light);
-  stroke: var(--primary-fg-color);
+#image-upload {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 1rem;
 }
-#image-upload svg text {
-  font-size: 2rem;
-  font-weight: bold;
-  fill: var(--primary-fg-color);
+#image-upload #preview {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-size, 4), minmax(0, 1fr));
+  gap: 1rem;
+}
+#image-upload #preview label {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  box-shadow: 2px 2px 4px #555;
+}
+#image-upload #preview label input {
+  margin: 1rem;
+}
+
+img.default-image {
+  max-width: 10rem;
 }
 
 /*# sourceMappingURL=style.css.map */

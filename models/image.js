@@ -11,24 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-
-      /*
-      This table will be unique in the fact that it will have a number of different relationships. 
-      - First each celestial body will have a one-to-one relationship with an image within this table.
-        - This represents the default or "profile image" to be used
-        - This will be handled by each celestialbody have an id to said image
-      - Second each celestial body will have a one-to-many relationship with an image within this table
-        - This will be a composite relationship utilizing two columns "recordType" and "recordId". 
-          - The composite relationship is necessary to ensure we dont have id collisions across multiple tables
-      */
-
-      //First up one to one relationships
-      models.Image.hasOne(models.Galaxy);
+      models.Image.belongsTo(models.Galaxy, {foreignKey: `resourceId`, constraints: false}); //cannot enforce unique fk as such will be compared agains resource as well
     }
   }
   Image.init({
+    caption: DataTypes.TEXT,
     extension: DataTypes.STRING,
-    resource: DataTypes.STRING
+    resource: DataTypes.STRING,
+    resourceId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Image',

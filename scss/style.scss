@@ -82,7 +82,7 @@ form {
 	flex-flow: column nowrap;
 	gap:2rem;
 }
-label:not(.file-upload) {
+label:not(.file-upload, .image-selection) {
 	flex:1;
 	border-bottom: 1px solid;
 	position: relative;
@@ -201,15 +201,27 @@ button{
 }
 
 #image-upload{
-
-	svg{
-		fill: var(--primary-bg-color-light);
-		stroke: var(--primary-fg-color);
-		text{
-			font-size: 2rem;
-			font-weight: bold;
-			fill: var(--primary-fg-color);
+	display: flex; 
+	flex-flow: column nowrap;
+	justify-content: flex-start;
+	align-items: flex-start;
+	gap: 1rem;
+	#preview{
+		display: grid;
+		grid-template-columns: repeat(var(--grid-size, 4),minmax(0, 1fr));
+		gap: 1rem;
+		label {
+			display: flex;
+			flex-flow: column nowrap;
+			justify-content: space-between;
+			box-shadow: 2px 2px 4px #555;
+			input{
+				margin: 1rem;
+			}
 		}
 	}
-	
+}
+
+img.default-image{
+	max-width: 10rem;
 }

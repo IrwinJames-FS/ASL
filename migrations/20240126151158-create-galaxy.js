@@ -22,14 +22,6 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false
       },
-      ImageId: {
-        type: Sequelize.INTEGER,
-        references:{
-          model: "Images",
-          key: "id"
-        },
-        allowNull: true,
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

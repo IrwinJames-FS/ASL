@@ -8,14 +8,29 @@ const { Image } = require("../models");
  * @param {*} res 
  * @param {*} next 
  */
-const uploadImages = (req, res, next) => {
-	console.log("On to the upload portion");
+const uploadImages = async (req, res, next) => {
 	if(!res.locals.resourceId) throw new ServerError("A resource Id must be provided");
-	if(!("image" in req.files)) return next(); //Nothing to upload
+	if(!("images" in req.files)) return next(); //Nothing to upload
 	const resource = req.baseUrl.slice(1);
-	const images = req.files.images; //All images are recieved under the name images. using multiple property so expect this to be an array
-
+	const uploadPath = `${__dirname}/../public/uploads/${resource}/`;
+	const images = req.files.images.map((img, i) => {
+		return {
+			extension: path.extname(img.name),
+			resource,
+			resourceId: res.locals.resourceId
+		}
+	});
+	try {
+		const records = await Image.bulkCreate(images);
+		req.files.images.forEach((file, index) => {
+			const {id, extension} = records[index];
+			file.mv(`${uploadPath}${id}${extension}`)
+		});
+		res.locals.images = records;
 	return next();
+	} catch (e) {
+		return next(e);
+	}
 }
 
 module.exports = {uploadImages};

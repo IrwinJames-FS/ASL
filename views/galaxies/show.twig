@@ -1,0 +1,9 @@
+{% extends "galaxies/_default.twig" %}
+
+{% block main_content %}
+<main>
+	<h1>{{galaxy.name}}</h1>
+	<img class="default-image" src="/uploads/galaxies/{{galaxy.Image.id}}{{galaxy.Image.extension}}"/>
+	<p>{{galaxy.description}}</p>
+</main>
+{% endblock %}

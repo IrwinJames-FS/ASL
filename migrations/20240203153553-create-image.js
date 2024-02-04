@@ -9,11 +9,18 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      caption: {
+        type: Sequelize.TEXT
+      },
       extension: {
         type: Sequelize.STRING
       },
       resource: {
         type: Sequelize.STRING
+      },
+      resourceId: {
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,

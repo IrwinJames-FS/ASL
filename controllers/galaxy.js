@@ -29,9 +29,9 @@ const index = async (req, res, next) => {
 const show = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const result = await Galaxy.findByPk(id);
-    if(!result) return next(new NotFoundError(`No galaxy found at index: ${id}`));
-    return res.status(200).json(result);
+    const galaxy = await Galaxy.findByPk(id, {include: ["Images", "Image"]});
+    if(!galaxy) return next(new NotFoundError(`No galaxy found at index: ${id}`));
+    res.render("galaxies/show", {galaxy})
   } catch (e) {
     console.log(e);
     return next(new ServerError());
@@ -46,9 +46,11 @@ const show = async (req, res, next) => {
  * @returns 
  */
 const create = async (req, res, next) => {
+  const {Image, ...body} = req.body;
+  const isNewImage = Image && Image.startsWith("n-");
   try {
-    const {id} = await Galaxy.create(req.body);
-    console.log("saved", id);
+    const {id} = await Galaxy.create(isNewImage? body:{...body, Image}); //Only save the Image reference if the Refence exists
+    if(isNewImage) res.locals.newDefaultImage = parseInt(Image.slice(2));
     res.locals.resourceId = id;
     return next(); //Let the middleware take the wheel
   } catch (e) {
@@ -120,8 +122,15 @@ const mknew = (req, res) => {
  * @param {import("express").NextFunction} next 
  */
 const updateImage = async (req, res, next) => {
-  console.log(res.locals.resourceId);
-  console.log("Time to update the image");
-  res.redirect(303, `/galaxies/${res.locals.resourceId}`);
+  console.log("Finally updating the image", res.locals.resourceId, res.locals.newDefaultImage, res.locals.images);
+  const id = res.locals.resourceId;
+  const imgIndex = res.locals.newDefaultImage;
+  if(imgIndex)  {
+    
+    const ImageId = res.locals.images[imgIndex].id;
+    console.log(ImageId, imgIndex, res.locals.images);
+    await Galaxy.update({ImageId}, {where:{id}});
+  }
+  res.redirect(303, `/galaxies/${id}`);
 }
 module.exports = { index, show, create, update, remove, mknew, updateImage }
