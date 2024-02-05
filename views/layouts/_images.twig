@@ -1,0 +1,16 @@
+{% extends "layouts/_default.twig" %}
+
+{% block page_title %}Star Tracker | {{resource}}{% endblock %}
+{% block main_content %}
+<div class="row space-between rounded shadowed">
+	<h4>{{resource|capitalize}} Images</h4>
+</div>
+<section class="grid">
+{% for record in records %}
+	<div class="image-container">
+		<img src="{{record.src}}" alt="{{record.caption}}"/>
+		<p>{{record.caption}}</p>
+	</div>
+{% endfor %}
+{% endblock %}
+</section>

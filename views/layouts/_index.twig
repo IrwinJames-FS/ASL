@@ -4,9 +4,14 @@
 {% block main_content %}
 <div class="row space-between rounded shadowed">
 	<h4>{{resource|capitalize}}</h4>
-	<a href="/{{resource}}/create" class="button primary">
-		<i class="fa fa-add"></i>
-	</a>
+	<nav>
+		<a href="/{{resource}}/create" class="button primary">
+			<i class="fa fa-add"></i>
+		</a>
+		<a href="/{{resource}}/images" class="button primary">
+			<i class="fa fa-images"></i>
+		</a>
+	</nav>
 </div>
 {% for record in records %}
 {% include "partials/recordRow.twig" with {"record":record, "resource":resource} %}

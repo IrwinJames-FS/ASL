@@ -1,7 +1,7 @@
-{% set image = (record.Images|length > 0) ? record.Images[0]: null%}
-{% set imgsrc = (image is defined) ? image.src:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/256px-No-Image-Placeholder.svg.png" %}
+
+
 <div class="row gap-1 shadowed clipped rounded">
-	<img src="{{imgsrc}}" class="mw-10"/>
+	<img src="{{record.image.src}}" alt="{{record.image.alt}}" class="mw-10"/>
 	<div class="column expand">
 		<div class="row space-between">
 			<h4><a href="/{{resource}}/{{record.id}}">{{record.name}}</a></h4>

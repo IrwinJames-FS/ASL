@@ -6,7 +6,7 @@
 <div class="row space-between">
 	<h1>{{record.name}}</h1>
 	<div class="row justify-end gap-1">
-		<p>{{galaxy.size}}lightyears</p>
+		<p>{{record.size}} {{unit_of_measure}}</p>
 		<a href="/{{resource}}/{{record.id}}/edit" class="button primary"><i class="fa fa-edit"></i></a>
 		<a href="/{{resource}}/{{record.id}}/delete" class="button error" onclick="return dref(event, 'Are you sure?', 'This cannot be undone!')"><i class="fa fa-trash"></i></a>
 	</div>
@@ -18,10 +18,12 @@
 <section class="grid">
 	{% for image in record.Images %}
 		<div class="image-container">
-			<img src="{{image.src}}"/>
+			<img src="{{image.src}}" alt="{{image.caption}}"/>
 			<p>{{image.caption}}</p>
 		</div>
 		
 	{% endfor %}
 </section>
+{% block addt_content %}{% endblock %}
 {% endblock %}
+

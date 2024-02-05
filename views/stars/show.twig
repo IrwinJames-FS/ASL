@@ -1,20 +1,28 @@
-{% extends "stars/_default.twig" %}
+{% extends "layouts/_show.twig" %}
 
-{% block main_content %}
-<div class="row space-between">
-	<h1>{{star.name}}</h1>
-	<p>{{star.size}}lightyears</p>
-</div>
+{% set resource = "stars" %}
 
-<p>{{star.description}}</p>
+{% set navIndex = 2 %}
 
+{% set unit_of_measure = "miles" %}
+
+{% block addt_content %}
+<h4>Planets</h4>
 <section class="grid">
-	{% for image in galaxy.Images%}
-		<div class="image-container">
-			<img src="/uploads/galaxies/{{image.id}}{{image.extension}}"/>
-			<p>{{image.caption}}</p>
-		</div>
-		
-	{% endfor %}
+{% for planet in record.Planets %}
+	<a href="{{planet.src}}" class="image-container">
+		<img src="{{planet.image.src}}" alt="{{planet.image.alt}}"/>
+		<p>{{planet.name}}</p>
+	</a>
+{% endfor %}
 </section>
+{% if record.Galaxy is defined %}
+	<h4>Galaxy</h4>
+	<section class="grid">
+		<a href="{{record.Galaxy.src}}" class="image-container">
+			<img src="{{record.Galaxy.image.src}}" alt="{{record.Galaxy.image.alt}}"/>
+			<p>{{record.Galaxy.name}}</p>
+		</a>
+	</section>
+{% endif %}
 {% endblock %}

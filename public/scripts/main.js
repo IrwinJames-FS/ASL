@@ -7,6 +7,7 @@ import { modal } from "./modal.js";
 		event.stopImmediatePropagation();
 
 		return modal(title, message, confirmed => {
+			if(!confirmed) return;
 			const el = climbTree(event.target, "A");
 			window.location.href= el.href;
 		});

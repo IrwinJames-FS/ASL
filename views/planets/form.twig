@@ -1,2 +1,15 @@
 {% extends "layouts/_form.twig" %}
 
+{% block addt_fields %}
+<div class="row">
+<label class="expand">
+	<span>Stars</span>
+	<select name="Stars" value="{{formValues.Stars}}" multiple>
+		<option {{(formValues.Stars is defined) ? "":"selected" }} disabled>Pick a star</option>
+		{% for star in stars %}
+			<option value="{{star.id}}" {{(star.id in formValues.stars) ? "selected"}}>{{star.name}}</option>
+		{% endfor %}
+	</select>
+</label>
+</div>
+{% endblock %}

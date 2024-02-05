@@ -1,4 +1,4 @@
-const { Planet } = require("../models");
+const { Planet, Star, Galaxy } = require("../models");
 const { ServerError, NotFoundError, ValidationError } = require("../errors");
 const { ValidationError: SequelizeValidationError, UniqueConstraintError, DatabaseError } = require("sequelize");
 
@@ -15,14 +15,7 @@ const index = async (req, res, next) => {
     if(req.headers["content-type"] == "application/json"){
       return res.status(200).json(planets);
     }
-    res.render("planets/index", {planets});
-  } catch (e) {
-    return next(new ServerError(e.message));
-  }
-  try {
-    
-    return res.status(200).json(results);
-    
+    res.render("planets/index", {records: planets});
   } catch (e) {
     return next(new ServerError(e.message));
   }
@@ -38,12 +31,12 @@ const index = async (req, res, next) => {
 const show = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const planet = await Planet.findByPk(id, {include: ["Images"]});
+    const planet = await Planet.findByPk(id, {include: ["Images", {model: Star, include: ["Images", {model: Galaxy, include:["Images"]}]}]});
     if(!planet) return next(new NotFoundError(`No planet found at index: ${id}`));
     if(req.headers["content-type"] == "application/json"){
       return res.status(200).json(planet);
     }
-    res.render("planets/show", {planet})
+    res.render("planets/show", {record: planet})
   } catch (e) {
     console.log(e);
     return next(new ServerError());
@@ -60,11 +53,12 @@ const show = async (req, res, next) => {
 const create = async (req, res, next) => {
   try {
     const {Stars, ...body} = req.body; //remove Stars from the set
-    const {id} = await Planet.create(body); //Only save the Image reference if the Refence exists
-    await planet.setStars(Stars);
-    res.locals.resourceId = id;
+    const planet = await Planet.create(body); //Only save the Image reference if the Refence exists
+    if(Stars && Stars.length) await planet.setStars(Stars);
+    res.locals.resourceId = planet.id;
     return next(); //Let the middleware take the wheel
   } catch (e) {
+    console.log(e);
     switch (e.constructor) {
       case UniqueConstraintError:
         return next(new ValidationError("Duplicate Unique Value", e.errors));
@@ -86,12 +80,18 @@ const create = async (req, res, next) => {
 const update = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const [planet] = await Galaxy.update(req.body, {where:{id}});
-    if(!planet) return next(new NotFoundError("This galaxy was not found int the database"));
-    res.locals.resourceId = planet;
+    const {Stars, ...body} = req.body;
+    const planet = await Planet.findByPk(id);
+    await planet.update(body);
+    await planet.setStars(Stars);
+
+    if(!planet) return next(new NotFoundError("This planet was not found int the database"));
+    res.locals.resourceId = id;
     return next();
   } catch (e) {
+    console.log(e);
     switch (e.constructor) {
+      
       case UniqueConstraintError:
         return next(new ValidationError("Duplicate Unique Value", e.errors));
       default:
@@ -125,8 +125,10 @@ HTML 5 specific routes
 * HTML 5 specific routes dont are only intended to deliver html.
 */
 
-const mknew = (req, res) => {
-  res.render("planets/create");
+const mknew = async (req, res) => {
+  const stars = await Star.findAll({attributes:["id", "name"]});
+  console.log(stars);
+  res.render("planets/create", {stars: stars});
 };
 
 /**
@@ -138,9 +140,11 @@ const mknew = (req, res) => {
 const edit = async (req, res) => {
   const { id } = req.params;
   try {
-    const planet = await Galaxy.findByPk(id, {include: ["Images"]});
+    const planet = await Planet.findByPk(id, {include: ["Images", {model:Star, attributes: ["id"]}]});
+    const stars = await Star.findAll({attributes: ["id", "name"]});
+    console.log(stars);
     if(!planet) return next(new NotFoundError(`No planet found at index: ${id}`));
-    res.render("planets/edit", {galaxy})
+    res.render("planets/edit", {planet, stars})
   } catch (e) {
     console.log(e);
     return next(new ServerError());

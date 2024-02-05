@@ -1,6 +1,7 @@
-const { Galaxy } = require("../models");
+const { Galaxy, Star, Planet, Image } = require("../models");
 const { ServerError, NotFoundError, ValidationError } = require("../errors");
 const { ValidationError: SequelizeValidationError, UniqueConstraintError, DatabaseError } = require("sequelize");
+
 
 /**
  * 
@@ -12,12 +13,10 @@ const { ValidationError: SequelizeValidationError, UniqueConstraintError, Databa
 const index = async (req, res, next) => {
   try {
     const galaxies = await Galaxy.findAll({include: ["Images"]}); //Implement limit and offset methods\
-    
-    console.log(req.headers);
     if(req.headers["content-type"] == "application/json"){
       return res.status(200).json(galaxies);
     }
-    res.render("galaxies/index", {galaxies});
+    res.render("galaxies/index", {records: galaxies});
   } catch (e) {
     return next(new ServerError(e.message));
   }
@@ -33,7 +32,7 @@ const index = async (req, res, next) => {
 const show = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const galaxy = await Galaxy.findByPk(id, {include: ["Images"]});
+    const galaxy = await Galaxy.findByPk(id, {include: ["Images", {model: Star, include: ["Images", {model: Planet, include: ["Images"]}]}]});
     if(!galaxy) return next(new NotFoundError(`No galaxy found at index: ${id}`));
     if(req.headers["content-type"] == "application/json"){
       return res.status(200).json(galaxy);
@@ -104,8 +103,7 @@ const update = async (req, res, next) => {
 const remove =  async (req, res, next) => {
   const { id } = req.params;
   try {
-    const galaxy = await Galaxy.findByPk(id);
-    await galaxy.destroy();
+    await Galaxy.destroy({where:{id}, individualHooks: true});
     return res.redirect(303, `/galaxies/`);
   } catch (e) {
     return next(e);
@@ -127,7 +125,7 @@ const mknew = (req, res) => {
  * @param {*} res 
  * @returns 
  */
-const edit = async (req, res) => {
+const edit = async (req, res, next) => {
   const { id } = req.params;
   try {
     const galaxy = await Galaxy.findByPk(id, {include: ["Images"]});
@@ -138,5 +136,7 @@ const edit = async (req, res) => {
     return next(new ServerError());
   }
 };
+
+
 
 module.exports = { index, show, create, update, remove, mknew, edit }

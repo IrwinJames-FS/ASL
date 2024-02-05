@@ -22,6 +22,7 @@
 			<textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' placeholder="" name="description">{{formValues.description}}</textarea>
 		</label>
 	</div>
+	{% block addt_fields %}{% endblock %}
 	<div id="#images-editor">
 		{% for image in formValues.Images %}
 			<div class="row">

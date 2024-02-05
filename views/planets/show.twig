@@ -1,25 +1,27 @@
-{% extends "planets/_default.twig" %}
+{% extends "layouts/_show.twig" %}
 
-{% block main_content %}
-<div class="row space-between">
-	<h1>{{galaxy.name}}</h1>
-	<div class="row justify-end gap-1">
-		<p>{{galaxy.size}}lightyears</p>
-		<a href="/planets/{{galaxy.id}}/edit" class="button primary"><i class="fa fa-edit"></i></a>
-		<a href="/planets/{{galaxy.id}}/delete" class="button error" onclick="return dref(event, 'Are you sure?', 'This cannot be undone!')"><i class="fa fa-trash"></i></a>
-	</div>
-	
-</div>
+{% set resource = "planets" %}
 
-<p>{{galaxy.description}}</p>
+{% set navIndex = 1 %}
 
+{% set unit_of_measure = "miles" %}
+{% block addt_content %}
+<h4>Stars</h4>
 <section class="grid">
-	{% for image in planet.Images%}
-		<div class="image-container">
-			<img src="{{image.src}}"/>
-			<p>{{image.caption}}</p>
-		</div>
-		
-	{% endfor %}
+{% for star in record.Stars %}
+	<a href="{{star.src}}" class="image-container">
+		<img src="{{star.image.src}}" alt="{{star.image.alt}}"/>
+		<p>{{star.name}}</p>
+	</a>
+{% endfor %}
 </section>
+{% if record.galaxy is defined %}
+	<h4>Galaxy</h4>
+	<section class="grid">
+		<a href="{{record.galaxy.src}}" class="image-container">
+			<img src="{{record.galaxy.image.src}}" alt="{{record.galaxy.image.alt}}"/>
+			<p>{{record.galaxy.name}}</p>
+		</a>
+	</section>
+{% endif %}
 {% endblock %}

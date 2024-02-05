@@ -1,2 +1,16 @@
 {% extends "layouts/_form.twig" %}
 
+{% block addt_fields %}
+<div class="row">
+<label class="expand">
+	<span>Galaxy</span>
+	{{formValues.GalaxyId is defined}}
+	<select name="GalaxyId" value="{{(formValues.GalaxyId is defined) ? formValues.GalaxyId:"-1"}}">
+		<option selected="true" value="-1" disabled>Pick a galaxy</option>
+		{% for galaxy in galaxies %}
+			<option value="{{galaxy.id}}" {{(galaxy.id == formValues.GalaxyId) ? 'selected'}}>{{galaxy.name}}</option>
+		{% endfor %}
+	</select>
+</label>
+</div>
+{% endblock %}

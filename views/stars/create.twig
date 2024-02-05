@@ -8,5 +8,5 @@
 	<script src="/scripts/formHandler.js" type="module"></script>
 {% endblock %}
 {% block main_content %}
-	{% include "stars/form.twig" with {formName: "Create a Star", formAction:"/stars", formValues: {name: "", description: "", size: ""}}%}
+	{% include "stars/form.twig" with {formName: "Create a Star", formAction:"/stars", formValues: {name: "", description: "", size: "", Galaxy: null}}%}
 {% endblock %}
